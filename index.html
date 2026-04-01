@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N & K Saigon – Nghệ Thuật Không Gian Sống</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --sky:     #4BBFDE;
+  --sky-l:   #7ED5EC;
+  --sky-ll:  #C2EBF6;
+  --sky-pale:#EBF8FD;
+  --sky-d:   #2A9DBF;
+  --white:   #FFFFFF;
+  --off:     #F7FCFE;
+  --cream:   #F2F9FC;
+  --ink:     #1A3A47;
+  --ink2:    #2E6478;
+  --muted:   #6B9BAD;
+  --border:  rgba(75,191,222,0.18);
+  --shadow-s: 0 4px 20px rgba(75,191,222,0.12);
+  --shadow-m: 0 12px 48px rgba(75,191,222,0.18);
+  --shadow-l: 0 28px 80px rgba(75,191,222,0.2);
+  --r-sm: 16px;
+  --r-md: 24px;
+  --r-lg: 36px;
+  --r-xl: 48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--sky); border-radius: 99px; }
+
+/* ─── BLOBS ─── */
+.blob {
+  position: absolute;
+  border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
+  background: radial-gradient(circle at 40% 40%, var(--sky-l), var(--sky));
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+/* ═══ HEADER ═══ */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.4s;
+}
+header.scrolled {
+  box-shadow: 0 4px 32px rgba(75,191,222,0.1);
+}
+
+nav {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 32px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; flex-shrink: 0;
+}
+.logo img {
+  height: 46px; border-radius: 12px;
+}
+.logo-text { line-height: 1.15; }
+.logo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--ink); letter-spacing: 2px;
+  display: block;
+}
+.logo-sub {
+  font-size: 9px; font-weight: 600;
+  color: var(--sky-d); letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+}
+
+.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+.nav-links a {
+  text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  color: var(--ink2);
+  padding: 8px 18px; border-radius: 99px;
+  transition: all 0.3s;
+  letter-spacing: 0.3px;
+}
+.nav-links a:hover {
+  color: var(--sky-d);
+  background: var(--sky-pale);
+}
+
+.nav-cta {
+  background: var(--sky);
+  color: white !important;
+  padding: 9px 22px !important;
+  border-radius: 99px !important;
+  box-shadow: 0 4px 16px rgba(75,191,222,0.35);
+  transition: all 0.3s !important;
+}
+.nav-cta:hover {
+  background: var(--sky-d) !important;
+  background: none !important;
+  background: var(--sky-d) !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(75,191,222,0.45) !important;
+}
+
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  padding: 8px; border: none; background: none; cursor: pointer;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 99px;
+  transition: all 0.35s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav {
+  display: none; position: fixed;
+  top: 72px; left: 0; right: 0;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  padding: 20px 24px 28px;
+  flex-direction: column; gap: 4px;
+  z-index: 999;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-m);
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  text-decoration: none; font-size: 15px; font-weight: 600;
+  color: var(--ink2); padding: 13px 18px; border-radius: var(--r-sm);
+  transition: all 0.3s;
+}
+.mobile-nav a:hover { background: var(--sky-pale); color: var(--sky-d); }
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  padding-top: 72px;
+  background: linear-gradient(160deg, #FFFFFF 0%, var(--sky-pale) 50%, #EBF8FD 100%);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center;
+}
+
+.hero .blob:nth-child(1) { width: 600px; height: 600px; top: -150px; right: -150px; opacity: 0.12; animation: blobFloat 10s ease-in-out infinite; }
+.hero .blob:nth-child(2) { width: 400px; height: 400px; bottom: -80px; left: -80px; opacity: 0.08; animation: blobFloat 13s ease-in-out infinite reverse; }
+.hero .blob:nth-child(3) { width: 250px; height: 250px; top: 40%; left: 30%; opacity: 0.06; animation: blobFloat 8s ease-in-out infinite; }
+
+@keyframes blobFloat {
+  0%,100% { border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; transform: translate(0,0) rotate(0deg); }
+  33% { border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%; transform: translate(20px,-15px) rotate(5deg); }
+  66% { border-radius: 70% 30% 50% 50% / 30% 70% 50% 50%; transform: translate(-10px,20px) rotate(-3deg); }
+}
+
+/* Soft wave divider */
+.hero-wave {
+  position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 80px;
+}
+
+.hero-inner {
+  position: relative; z-index: 3;
+  max-width: 1280px; margin: 0 auto;
+  padding: 60px 32px 100px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center; gap: 64px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--sky-ll);
+  color: var(--sky-d);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 8px 20px; border-radius: 99px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.7s ease both;
+}
+.hero-badge i { font-size: 10px; }
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 5.5vw, 74px);
+  font-weight: 600; line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 22px;
+  animation: fadeUp 0.8s ease both 0.08s;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--sky-d);
+}
+
+.hero-sub {
+  font-size: 15px; line-height: 1.85; color: var(--muted);
+  max-width: 480px; margin-bottom: 36px;
+  animation: fadeUp 0.9s ease both 0.16s;
+  font-weight: 400;
+}
+
+.hero-ctas {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  animation: fadeUp 1s ease both 0.24s;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--sky);
+  color: white; padding: 14px 30px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none; border: none; cursor: pointer;
+  border-radius: 99px;
+  transition: all 0.35s;
+  box-shadow: 0 8px 28px rgba(75,191,222,0.38);
+}
+.btn-primary:hover {
+  background: var(--sky-d);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(75,191,222,0.48);
+}
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: white; color: var(--sky-d);
+  padding: 13px 30px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  border: 2px solid var(--sky-ll);
+  border-radius: 99px;
+  transition: all 0.35s;
+}
+.btn-outline:hover {
+  border-color: var(--sky);
+  background: var(--sky-pale);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-s);
+}
+
+/* Hero stats */
+.hero-stats {
+  display: flex; gap: 0; margin-top: 44px;
+  animation: fadeUp 1s ease both 0.32s;
+  background: white;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-m);
+  overflow: hidden;
+  max-width: 380px;
+}
+.stat-item {
+  flex: 1; padding: 20px 16px; text-align: center;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.stat-item:last-child { border-right: none; }
+.stat-item:hover { background: var(--sky-pale); }
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--sky-d); line-height: 1;
+}
+.stat-lbl {
+  font-size: 10px; font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Hero mosaic */
+.hero-mosaic {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 220px 160px;
+  gap: 12px;
+  animation: fadeLeft 0.9s ease both 0.2s;
+}
+.mosaic-img {
+  border-radius: var(--r-md); overflow: hidden;
+  position: relative; box-shadow: var(--shadow-m);
+}
+.mosaic-img:nth-child(1) { grid-column: 1/2; grid-row: 1/3; border-radius: var(--r-lg); }
+.mosaic-img:nth-child(2) { border-radius: var(--r-md) var(--r-lg) var(--r-md) var(--r-md); }
+.mosaic-img:nth-child(3) { border-radius: var(--r-md) var(--r-md) var(--r-lg) var(--r-md); }
+.mosaic-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s;
+}
+.mosaic-img:hover img { transform: scale(1.05); }
+.mosaic-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(26,58,71,0.35) 0%, transparent 60%);
+  border-radius: inherit;
+}
+.mosaic-label {
+  position: absolute; bottom: 14px; left: 16px;
+  z-index: 3; color: white;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* Scroll indicator */
+.scroll-down {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%); z-index: 10;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-down span {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2.5px; color: var(--muted);
+  text-transform: uppercase;
+}
+.scroll-arrow {
+  width: 40px; height: 40px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-s);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sky); font-size: 13px;
+  animation: bob 2.5s ease infinite;
+}
+@keyframes bob {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ═══ SECTION COMMONS ═══ */
+section { padding: 100px 32px; }
+.sec-inner { max-width: 1280px; margin: 0 auto; }
+
+.sec-eyebrow {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--sky-d);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.sec-eyebrow::before, .sec-eyebrow::after {
+  content: '';
+  flex: 1; max-width: 40px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--sky-l));
+  border-radius: 99px;
+}
+.sec-eyebrow::after { background: linear-gradient(90deg, var(--sky-l), transparent); }
+
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 600; line-height: 1.15;
+  color: var(--ink); margin-bottom: 16px;
+}
+.sec-title .hi { color: var(--sky-d); font-style: italic; }
+.sec-desc {
+  font-size: 15px; line-height: 1.85;
+  color: var(--muted); max-width: 560px; font-weight: 400;
+}
+
+/* ═══ ABOUT ═══ */
+#about {
+  background: var(--white);
+  position: relative; overflow: hidden;
+}
+#about .blob { width: 500px; height: 500px; top: -100px; right: -100px; }
+
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+
+.about-imgs { position: relative; }
+
+.about-img-main {
+  width: 100%; aspect-ratio: 3/4;
+  border-radius: var(--r-xl); overflow: hidden;
+  box-shadow: var(--shadow-l);
+  position: relative;
+}
+.about-img-main img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.8s;
+}
+.about-img-main:hover img { transform: scale(1.04); }
+.about-img-main::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgba(26,58,71,0.3) 100%);
+}
+
+.about-img-float {
+  position: absolute;
+  bottom: -28px; right: -28px;
+  width: 46%;
+  border-radius: var(--r-lg); overflow: hidden;
+  border: 4px solid white;
+  box-shadow: var(--shadow-m);
+}
+.about-img-float img {
+  width: 100%; aspect-ratio: 1;
+  object-fit: cover; display: block;
+}
+
+/* Decorative ring */
+.about-ring {
+  position: absolute; top: -24px; left: -24px;
+  width: 100px; height: 100px;
+  border: 3px solid var(--sky-ll);
+  border-radius: 50%;
+  z-index: -1;
+}
+.about-ring::after {
+  content: '';
+  position: absolute; inset: 12px;
+  border: 2px dashed var(--sky-l);
+  border-radius: 50%;
+  animation: spinSlow 20s linear infinite;
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+.about-text { }
+
+.about-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-style: italic;
+  color: var(--sky-d);
+  border-left: 3px solid var(--sky-ll);
+  padding: 16px 20px; margin: 28px 0;
+  line-height: 1.65;
+  background: var(--sky-pale);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+
+.about-features {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-top: 32px;
+}
+.feat-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: all 0.35s;
+}
+.feat-item:hover {
+  background: var(--sky-pale);
+  border-color: var(--sky-l);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-s);
+}
+.feat-icon {
+  width: 40px; height: 40px; flex-shrink: 0;
+  background: var(--sky-ll);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--sky-d);
+}
+.feat-text strong {
+  display: block; font-size: 13px; font-weight: 700;
+  color: var(--ink); margin-bottom: 2px;
+}
+.feat-text span { font-size: 11px; color: var(--muted); }
+
+/* ═══ SERVICES ═══ */
+#services {
+  background: var(--cream);
+  position: relative; overflow: hidden;
+}
+
+.services-header {
+  text-align: center; margin-bottom: 64px;
+}
+.services-header .sec-eyebrow { justify-content: center; }
+.services-header .sec-desc { margin: 0 auto; text-align: center; }
+
+.services-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.srv-card {
+  background: white;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-s);
+  transition: all 0.45s;
+  cursor: pointer;
+}
+.srv-card:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-l);
+  border-color: var(--sky-l);
+}
+
+.srv-img {
+  width: 100%; height: 220px;
+  overflow: hidden; position: relative;
+}
+.srv-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s;
+}
+.srv-card:hover .srv-img img { transform: scale(1.07); }
+.srv-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(26,58,71,0.55) 100%);
+}
+
+.srv-icon {
+  position: absolute; bottom: 16px; left: 20px; z-index: 3;
+  width: 52px; height: 52px;
+  background: var(--sky);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: white;
+  box-shadow: 0 8px 24px rgba(75,191,222,0.45);
+  transition: all 0.35s;
+}
+.srv-card:hover .srv-icon {
+  background: var(--sky-d);
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.srv-tag {
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  background: rgba(255,255,255,0.92);
+  color: var(--sky-d);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 99px;
+  backdrop-filter: blur(8px);
+}
+
+.srv-body { padding: 28px 26px 30px; }
+.srv-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--ink); margin-bottom: 10px;
+}
+.srv-desc {
+  font-size: 13px; line-height: 1.75;
+  color: var(--muted); margin-bottom: 20px; font-weight: 400;
+}
+.srv-list {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 24px;
+}
+.srv-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--ink2); font-weight: 500;
+}
+.srv-list li::before {
+  content: '';
+  width: 8px; height: 8px;
+  background: var(--sky-l);
+  border-radius: 50%; flex-shrink: 0;
+}
+.srv-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700;
+  color: var(--sky-d); text-decoration: none;
+  transition: gap 0.3s;
+}
+.srv-link:hover { gap: 14px; }
+
+/* ═══ FEEDBACK ═══ */
+#feedback {
+  background: var(--white);
+  position: relative; overflow: hidden;
+}
+
+.feedback-header {
+  text-align: center; margin-bottom: 64px;
+  position: relative; z-index: 1;
+}
+.feedback-header .sec-eyebrow { justify-content: center; }
+.feedback-header .sec-desc { margin: 0 auto; text-align: center; }
+
+.fb-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; position: relative; z-index: 1;
+}
+
+.fb-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 30px 26px;
+  box-shadow: var(--shadow-s);
+  transition: all 0.4s;
+  position: relative; overflow: hidden;
+}
+.fb-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sky-l), var(--sky), var(--sky-d));
+  border-radius: 99px 99px 0 0;
+  opacity: 0; transition: opacity 0.4s;
+}
+.fb-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-l);
+  border-color: var(--sky-l);
+}
+.fb-card:hover::before { opacity: 1; }
+
+.zalo-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #E8F4FF;
+  border: 1px solid #BDDCF8;
+  color: #0078E8;
+  font-size: 10px; font-weight: 700;
+  padding: 5px 14px; border-radius: 99px;
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.fb-stars { display: flex; gap: 4px; margin-bottom: 18px; }
+.fb-stars i { color: #FFBB00; font-size: 13px; }
+
+.zalo-screen {
+  background: #F0F8FF;
+  border: 1px solid #DAEEFB;
+  border-radius: 20px;
+  padding: 16px 14px;
+  margin-bottom: 22px;
+}
+
+.z-msg {
+  font-size: 12px; line-height: 1.6;
+  padding: 9px 14px; margin-bottom: 8px; max-width: 88%;
+  font-weight: 500;
+}
+.z-msg.recv {
+  background: white;
+  color: var(--ink2);
+  border-radius: 4px 18px 18px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.z-msg.sent {
+  background: var(--sky);
+  color: white;
+  border-radius: 18px 4px 18px 18px;
+  margin-left: auto;
+}
+
+.fb-customer {
+  display: flex; align-items: center; gap: 14px;
+}
+.fb-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 700;
+  color: white; flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+.av-a { background: linear-gradient(135deg, var(--sky), var(--sky-d)); }
+.av-b { background: linear-gradient(135deg, #74C69D, #2D9A5F); }
+.av-c { background: linear-gradient(135deg, #F4A261, #E76F51); }
+
+.fb-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 700; color: var(--ink);
+}
+.fb-loc {
+  font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500;
+}
+.fb-loc i { color: var(--sky); margin-right: 4px; font-size: 10px; }
+
+/* Trust strip */
+.trust-strip {
+  display: flex; margin-top: 72px;
+  background: linear-gradient(135deg, var(--sky-pale), var(--cream));
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  overflow: hidden; flex-wrap: wrap;
+}
+.trust-item {
+  flex: 1; min-width: 150px;
+  padding: 32px 20px; text-align: center;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.trust-item:last-child { border-right: none; }
+.trust-item:hover { background: rgba(75,191,222,0.08); }
+.trust-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 700;
+  color: var(--sky-d); line-height: 1;
+}
+.trust-lbl {
+  font-size: 11px; font-weight: 600;
+  color: var(--muted); letter-spacing: 1.5px;
+  text-transform: uppercase; margin-top: 6px;
+}
+.trust-icon { font-size: 22px; color: var(--sky); margin-bottom: 8px; }
+
+/* ═══ CTA ═══ */
+.cta-band {
+  background: linear-gradient(135deg, var(--sky-d) 0%, var(--sky) 60%, var(--sky-l) 100%);
+  padding: 90px 32px;
+  position: relative; overflow: hidden;
+}
+.cta-band::before {
+  content: '';
+  position: absolute; top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+.cta-band::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -80px;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.cta-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 40px;
+  flex-wrap: wrap; position: relative; z-index: 1;
+}
+.cta-inner h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 600;
+  color: white; margin-bottom: 10px;
+}
+.cta-inner p { font-size: 15px; color: rgba(255,255,255,0.8); font-weight: 400; }
+.cta-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-white {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: white; color: var(--sky-d);
+  padding: 14px 30px;
+  font-size: 14px; font-weight: 700;
+  text-decoration: none; border-radius: 99px;
+  transition: all 0.35s;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+.btn-white:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+}
+.btn-white-outline {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: white;
+  padding: 12px 30px;
+  font-size: 14px; font-weight: 700;
+  text-decoration: none; border-radius: 99px;
+  border: 2px solid rgba(255,255,255,0.6);
+  transition: all 0.35s;
+}
+.btn-white-outline:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: white;
+  transform: translateY(-3px);
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  background: var(--ink);
+  padding: 72px 32px 32px;
+}
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer-grid {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 48px; margin-bottom: 52px;
+}
+
+.footer-brand .logo-name { font-size: 20px; color: white; display: block; margin-bottom: 4px; }
+.footer-brand .logo-sub { color: var(--sky-l); display: block; margin-bottom: 18px; }
+.footer-brand p {
+  font-size: 13px; line-height: 1.8;
+  color: rgba(255,255,255,0.45); margin-bottom: 24px; font-weight: 400;
+}
+.f-socials { display: flex; gap: 10px; }
+.f-social {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: rgba(255,255,255,0.55);
+  text-decoration: none; transition: all 0.35s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.f-social:hover {
+  background: var(--sky);
+  color: white; border-color: var(--sky);
+  transform: translateY(-3px);
+}
+
+.footer-col h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px; font-weight: 700;
+  color: white; letter-spacing: 1px;
+  margin-bottom: 20px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  color: rgba(255,255,255,0.45); text-decoration: none;
+  font-size: 13px; font-weight: 500; transition: all 0.3s;
+  display: flex; align-items: center; gap: 8px;
+}
+.footer-links a::before {
+  content: ''; width: 8px; height: 8px;
+  background: var(--sky-l); border-radius: 50%; flex-shrink: 0;
+  transition: background 0.3s;
+}
+.footer-links a:hover { color: var(--sky-l); }
+.footer-links a:hover::before { background: var(--sky); }
+
+.f-contact-item {
+  display: flex; gap: 12px; margin-bottom: 14px;
+  font-size: 13px; color: rgba(255,255,255,0.45); align-items: flex-start;
+  font-weight: 400;
+}
+.f-contact-item i { color: var(--sky); font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 24px;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.25); font-weight: 400; }
+.footer-bottom span { color: var(--sky-l); }
+
+/* ═══ FLOATING CONTACTS ═══ */
+.float-hub {
+  position: fixed; right: 22px; bottom: 44px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px; z-index: 999;
+}
+.float-contact {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 21px; color: white;
+  text-decoration: none; position: relative;
+  transition: all 0.35s;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+.float-contact:hover { transform: scale(1.18) translateX(-5px); }
+.float-contact::before {
+  content: attr(data-tip);
+  position: absolute; right: 66px;
+  background: var(--ink);
+  color: white;
+  font-size: 11px; font-weight: 700;
+  padding: 7px 16px; white-space: nowrap;
+  border-radius: 99px; opacity: 0;
+  transition: all 0.3s; pointer-events: none;
+}
+.float-contact:hover::before { opacity: 1; right: 70px; }
+.fc-zalo { background: radial-gradient(circle at 30% 30%, #42A8F5, #0078E8); }
+.fc-tiktok { background: radial-gradient(circle at 30% 30%, #555, #111); }
+.fc-msg { background: radial-gradient(circle at 30% 30%, #7BB3FF, #5865F2); }
+.float-contact::after {
+  content: ''; position: absolute; inset: -6px;
+  border-radius: 50%; border: 2px solid;
+  opacity: 0; animation: fpulse 2.5s ease infinite;
+}
+.fc-zalo::after { border-color: #42A8F5; }
+.fc-tiktok::after { border-color: #777; animation-delay: 0.8s; }
+.fc-msg::after { border-color: #5865F2; animation-delay: 1.6s; }
+@keyframes fpulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+.back-top {
+  position: fixed; bottom: 168px; right: 22px;
+  width: 44px; height: 44px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: var(--shadow-m);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sky); font-size: 14px;
+  cursor: pointer; transition: all 0.35s;
+  z-index: 998; opacity: 0; pointer-events: none;
+  border: 1px solid var(--border);
+}
+.back-top.show { opacity: 1; pointer-events: auto; }
+.back-top:hover { background: var(--sky); color: white; transform: translateY(-3px); box-shadow: var(--shadow-m); }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(36px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.rev {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.rev.in { opacity: 1; transform: translateY(0); }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1100px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .fb-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-mosaic { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-imgs { max-width: 420px; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .services-grid, .fb-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .trust-strip { flex-direction: column; }
+  .trust-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .trust-item:last-child { border-bottom: none; }
+  .cta-inner { flex-direction: column; align-items: flex-start; }
+  section { padding: 64px 18px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 38px; }
+  .hero-ctas { flex-direction: column; }
+  .about-features { grid-template-columns: 1fr; }
+  .hero-stats { max-width: 100%; }
+  .float-hub { right: 14px; bottom: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="hdr">
+  <nav>
+    <a href="#" class="logo">
+      <div class="logo-text">
+        <span class="logo-name">N & K SAIGON</span>
+        <span class="logo-sub">Nghệ Thuật Không Gian Sống</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Giới Thiệu</a></li>
+      <li><a href="#services">Dịch Vụ</a></li>
+      <li><a href="#feedback">Phản Hồi</a></li>
+      <li><a href="#contact" class="nav-cta">Liên Hệ Ngay</a></li>
+    </ul>
+    <button class="hamburger" id="hbBtn">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="mobile-nav" id="mobNav">
+  <a href="#about" onclick="closeMob()"><i class="fas fa-info-circle" style="color:var(--sky);margin-right:10px"></i>Giới Thiệu</a>
+  <a href="#services" onclick="closeMob()"><i class="fas fa-tools" style="color:var(--sky);margin-right:10px"></i>Dịch Vụ</a>
+  <a href="#feedback" onclick="closeMob()"><i class="fas fa-star" style="color:var(--sky);margin-right:10px"></i>Phản Hồi</a>
+  <a href="#contact" onclick="closeMob()"><i class="fas fa-phone" style="color:var(--sky);margin-right:10px"></i>Liên Hệ</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <i class="fas fa-gem"></i> Uy Tín · Nghệ Thuật · Tận Tâm
+      </div>
+
+      <h1 class="hero-title">
+        Biến Không Gian<br>
+        Thành <em>Tác Phẩm</em><br>
+        Nghệ Thuật
+      </h1>
+
+      <p class="hero-sub">
+        N & K Saigon — Đơn vị thi công sơn tường, sửa chữa nhà cửa và decor nội thất 
+        tại TP.HCM. Chúng tôi mang tinh hoa nghề thủ công kết hợp thẩm mỹ đương đại, 
+        biến mỗi ngôi nhà thành một công trình nghệ thuật đầy sống động.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#services" class="btn-primary">
+          <i class="fas fa-paint-roller"></i> Khám Phá Dịch Vụ
+        </a>
+        <a href="https://zalo.me" target="_blank" class="btn-outline">
+          <i class="fas fa-comment-dots"></i> Tư Vấn Miễn Phí
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">500+</div>
+          <div class="stat-lbl">Công Trình</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9★</div>
+          <div class="stat-lbl">Đánh Giá</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">8 Năm</div>
+          <div class="stat-lbl">Kinh Nghiệm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-mosaic">
+      <div class="mosaic-img">
+        <img src="image/image_01.jpg" alt="Nội thất đẹp">
+        <div class="mosaic-label">Decor Nội Thất</div>
+      </div>
+      <div class="mosaic-img">
+        <img src="image/image_02.jpg" alt="Sơn tường">
+        <div class="mosaic-label">Sơn Tường</div>
+      </div>
+      <div class="mosaic-img">
+        <img src="image/image_03.jpg" alt="Sửa chữa">
+        <div class="mosaic-label">Sửa Chữa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-down">
+    <span>Khám Phá</span>
+    <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+  </div>
+
+  <!-- Wave -->
+  <svg class="hero-wave" viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+  </svg>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-inner">
+    <div class="blob" style="width:500px;height:500px;top:-100px;right:-100px;"></div>
+    <div class="about-grid">
+      <div class="about-imgs rev">
+        <div class="about-ring"></div>
+        <div class="about-img-main">
+          <img src="image/image_01.jpg" alt="N&K Saigon công trình">
+        </div>
+        <div class="about-img-float">
+          <img src="image/image_04.jpg" alt="Decor nội thất">
+        </div>
+      </div>
+
+      <div class="about-text rev" style="transition-delay:0.2s">
+        <div class="sec-eyebrow">Về Chúng Tôi</div>
+        <h2 class="sec-title">
+          Tay Nghề Bậc Thầy,<br>
+          Tâm Hồn <span class="hi">Nghệ Sĩ</span>
+        </h2>
+        <p class="sec-desc">
+          Được thành lập với niềm đam mê biến những không gian bình thường thành những tác phẩm 
+          sống động, N & K Saigon tự hào mang đến chất lượng thi công chuẩn mực cùng 
+          thẩm mỹ tinh tế cho hàng trăm gia đình tại TP.HCM.
+        </p>
+
+        <blockquote class="about-quote">
+          "Mỗi bức tường là một trang giấy trắng — chúng tôi vẽ nên câu chuyện của gia đình bạn."
+        </blockquote>
+
+        <p class="sec-desc">
+          Đội ngũ thợ lành nghề với hơn 8 năm kinh nghiệm, trang thiết bị hiện đại và 
+          vật liệu chất lượng cao — chúng tôi cam kết mỗi công trình hoàn thành đúng hẹn, 
+          đúng ngân sách và vượt kỳ vọng.
+        </p>
+
+        <div class="about-features">
+          <div class="feat-item">
+            <div class="feat-icon"><i class="fas fa-medal"></i></div>
+            <div class="feat-text">
+              <strong>Thợ Lành Nghề</strong>
+              <span>8+ năm kinh nghiệm</span>
+            </div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><i class="fas fa-clock"></i></div>
+            <div class="feat-text">
+              <strong>Đúng Hẹn</strong>
+              <span>Cam kết tiến độ</span>
+            </div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="feat-text">
+              <strong>Bảo Hành</strong>
+              <span>Dài hạn toàn diện</span>
+            </div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="feat-text">
+              <strong>Giá Minh Bạch</strong>
+              <span>Báo giá chi tiết, rõ ràng</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-inner">
+    <div class="services-header rev">
+      <div class="sec-eyebrow">Dịch Vụ</div>
+      <h2 class="sec-title">Bộ Ba <span class="hi">Nghệ Thuật</span> Nhà Đẹp</h2>
+      <p class="sec-desc">
+        Từ sơn tường tinh xảo đến sửa chữa bền vững và decor đẳng cấp — 
+        một địa chỉ, ba giải pháp hoàn hảo cho ngôi nhà của bạn.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      <div class="srv-card rev" style="transition-delay:0.1s">
+        <div class="srv-img">
+          <img src="image/image_08.jpg" alt="Sơn tường chuyên nghiệp">
+          <div class="srv-icon"><i class="fas fa-paint-roller"></i></div>
+          <div class="srv-tag">Phổ biến nhất</div>
+        </div>
+        <div class="srv-body">
+          <h3 class="srv-name">Sơn Tường</h3>
+          <p class="srv-desc">
+            Thi công sơn nội thất và ngoại thất với kỹ thuật cao, vật liệu chất lượng, 
+            màu sắc đa dạng theo xu hướng 2026.
+          </p>
+          <ul class="srv-list">
+            <li>Sơn nội thất & ngoại thất</li>
+            <li>Sơn epoxy, texture, giả đá</li>
+            <li>Xử lý bề mặt chuyên sâu</li>
+            <li>Tư vấn màu sắc miễn phí</li>
+          </ul>
+          <a href="/detail.html" class="srv-link">Xem Thêm <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="srv-card rev" style="transition-delay:0.2s">
+        <div class="srv-img">
+          <img src="image/image_05.jpg" alt="Sửa chữa nhà">
+          <div class="srv-icon"><i class="fas fa-tools"></i></div>
+          <div class="srv-tag">Uy tín số 1</div>
+        </div>
+        <div class="srv-body">
+          <h3 class="srv-name">Sửa Chữa Nhà</h3>
+          <p class="srv-desc">
+            Giải quyết mọi vấn đề về kết cấu và công trình, từ chống thấm đến cải tạo 
+            toàn diện với độ bền cao nhất.
+          </p>
+          <ul class="srv-list">
+            <li>Chống thấm tường & mái</li>
+            <li>Sửa chữa điện nước</li>
+            <li>Ốp lát gạch đá cao cấp</li>
+            <li>Cải tạo phòng, WC, bếp</li>
+          </ul>
+          <a href="/detail.html" class="srv-link">Xem Thêm <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="srv-card rev" style="transition-delay:0.3s">
+        <div class="srv-img">
+          <img src="image/image_07.jpg" alt="Decor nội thất">
+          <div class="srv-icon"><i class="fas fa-couch"></i></div>
+          <div class="srv-tag">Sáng tạo nhất</div>
+        </div>
+        <div class="srv-body">
+          <h3 class="srv-name">Decor Nội Thất</h3>
+          <p class="srv-desc">
+            Thiết kế và thi công nội thất theo phong cách cá nhân hóa — 
+            từ hiện đại tối giản đến cổ điển sang trọng.
+          </p>
+          <ul class="srv-list">
+            <li>Thiết kế không gian sống</li>
+            <li>Lắp đặt đèn trang trí</li>
+            <li>Tủ kệ, vách ngăn đặt riêng</li>
+            <li>Decor phòng khách, bếp, ngủ</li>
+          </ul>
+          <a href="/detail.html" class="srv-link">Xem Thêm <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK -->
+<section id="feedback">
+  <div class="sec-inner">
+    <div class="feedback-header rev">
+      <div class="sec-eyebrow">Phản Hồi Khách Hàng</div>
+      <h2 class="sec-title">Tiếng Nói Từ <span class="hi">Ngàn Nhà</span></h2>
+      <p class="sec-desc">
+        Những chia sẻ thật từ khách hàng qua Zalo — minh chứng cho từng công trình chúng tôi đã trao tâm huyết.
+      </p>
+    </div>
+
+    <div class="fb-grid">
+      <div class="fb-card rev" style="transition-delay:0.1s">
+        <div class="zalo-badge"><i class="fas fa-comment-dots"></i> Phản hồi qua Zalo</div>
+        <div class="fb-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="zalo-screen">
+          <div class="z-msg recv">Chị ơi em muốn sơn lại phòng ngủ màu xanh nhạt pastel ạ 🙏</div>
+          <div class="z-msg sent">Em xem mẫu này nha! Xanh pastel tạo cảm giác thư giãn rất đẹp ✨</div>
+          <div class="z-msg recv">Quá đẹp chị ơi!! Em ưng lắm, book thợ nha 😍</div>
+        </div>
+        <div class="fb-customer">
+          <div class="fb-avatar av-a">M</div>
+          <div>
+            <div class="fb-name">Chị Minh Thu</div>
+            <div class="fb-loc"><i class="fas fa-map-marker-alt"></i>Quận 7, TP.HCM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fb-card rev" style="transition-delay:0.2s">
+        <div class="zalo-badge"><i class="fas fa-comment-dots"></i> Phản hồi qua Zalo</div>
+        <div class="fb-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="zalo-screen">
+          <div class="z-msg recv">Nhà tôi bị thấm mấy chỗ, bạn có thể qua khảo sát không?</div>
+          <div class="z-msg sent">Dạ anh ơi, bên em khảo sát miễn phí và báo giá chi tiết ạ!</div>
+          <div class="z-msg recv">OK xong rồi! Thợ làm rất nhanh và cẩn thận. Recommend 100% 👍</div>
+        </div>
+        <div class="fb-customer">
+          <div class="fb-avatar av-b">H</div>
+          <div>
+            <div class="fb-name">Anh Hoàng Nam</div>
+            <div class="fb-loc"><i class="fas fa-map-marker-alt"></i>Bình Thạnh, TP.HCM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fb-card rev" style="transition-delay:0.3s">
+        <div class="zalo-badge"><i class="fas fa-comment-dots"></i> Phản hồi qua Zalo</div>
+        <div class="fb-stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div class="zalo-screen">
+          <div class="z-msg recv">Mình muốn decor phòng khách phong cách vintage nhẹ nhàng ạ</div>
+          <div class="z-msg sent">Bên mình chuyên vintage và cổ điển mềm mại đó chị! Gửi portfolio nha 🌸</div>
+          <div class="z-msg recv">Wow đẹp quá!!! Làm y hệt cho mình nhé, quá hài lòng!! 💕</div>
+        </div>
+        <div class="fb-customer">
+          <div class="fb-avatar av-c">L</div>
+          <div>
+            <div class="fb-name">Chị Lan Anh</div>
+            <div class="fb-loc"><i class="fas fa-map-marker-alt"></i>Gò Vấp, TP.HCM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trust-strip rev">
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-building"></i></div>
+        <div class="trust-num">500+</div>
+        <div class="trust-lbl">Công Trình</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-star"></i></div>
+        <div class="trust-num">4.9</div>
+        <div class="trust-lbl">Đánh Giá Zalo</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-history"></i></div>
+        <div class="trust-num">8 Năm</div>
+        <div class="trust-lbl">Kinh Nghiệm</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="trust-num">100%</div>
+        <div class="trust-lbl">Bảo Hành</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fas fa-heart"></i></div>
+        <div class="trust-num">∞</div>
+        <div class="trust-lbl">Tận Tâm</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band" id="contact">
+  <div class="cta-inner">
+    <div>
+      <h2>Sẵn Sàng Tạo Nên Tác Phẩm?</h2>
+      <p>Liên hệ ngay để được tư vấn miễn phí và báo giá trong vòng 24 giờ.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="https://zalo.me" target="_blank" class="btn-white">
+        <i class="fas fa-comment-dots"></i> Chat Zalo
+      </a>
+      <a href="tel:0900000000" class="btn-white-outline">
+        <i class="fas fa-phone"></i> Gọi Ngay
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo-name">N & K SAIGON</span>
+        <span class="logo-sub">Nghệ Thuật Không Gian Sống</span>
+        <p>Chuyên thi công sơn tường, sửa chữa nhà cửa và decor nội thất tại TP.HCM. Uy tín – Nghệ thuật – Tận tâm.</p>
+        <div class="f-socials">
+          <a href="#" class="f-social" title="Zalo"><i class="fas fa-comment-dots"></i></a>
+          <a href="#" class="f-social" title="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="f-social" title="Messenger"><i class="fab fa-facebook-messenger"></i></a>
+          <a href="#" class="f-social" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Dịch Vụ</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Sơn Nội Thất</a></li>
+          <li><a href="#services">Sơn Ngoại Thất</a></li>
+          <li><a href="#services">Chống Thấm</a></li>
+          <li><a href="#services">Sửa Chữa Nhà</a></li>
+          <li><a href="#services">Decor Nội Thất</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Liên Kết</h4>
+        <ul class="footer-links">
+          <li><a href="#home">Trang Chủ</a></li>
+          <li><a href="#about">Giới Thiệu</a></li>
+          <li><a href="#services">Dịch Vụ</a></li>
+          <li><a href="#feedback">Phản Hồi</a></li>
+          <li><a href="#contact">Liên Hệ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Liên Hệ</h4>
+        <div class="f-contact-item"><i class="fas fa-map-marker-alt"></i><span>TP. Hồ Chí Minh, Việt Nam</span></div>
+        <div class="f-contact-item"><i class="fas fa-phone"></i><span>0900 000 000</span></div>
+        <div class="f-contact-item"><i class="fas fa-envelope"></i><span>nksaigon@gmail.com</span></div>
+        <div class="f-contact-item"><i class="fas fa-clock"></i><span>Thứ 2 – Chủ nhật<br>7:00 – 20:00</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 <span>N & K Saigon</span>. Bản quyền thuộc về chúng tôi.</p>
+      <p>Thiết kế với <span style="color:#FF6B6B">♥</span> tại Sài Gòn</p>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING CONTACTS -->
+<div class="float-hub">
+  <a href="https://zalo.me" target="_blank" class="float-contact fc-zalo" data-tip="Zalo">
+    <i class="fas fa-comment-dots"></i>
+  </a>
+  <a href="https://tiktok.com" target="_blank" class="float-contact fc-tiktok" data-tip="TikTok">
+    <i class="fab fa-tiktok"></i>
+  </a>
+  <a href="https://m.me" target="_blank" class="float-contact fc-msg" data-tip="Messenger">
+    <i class="fab fa-facebook-messenger"></i>
+  </a>
+</div>
+
+<button class="back-top" id="btt" onclick="scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+const hdr = document.getElementById('hdr');
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  hdr.classList.toggle('scrolled', s > 60);
+  btt.classList.toggle('show', s > 300);
+});
+
+const hbBtn = document.getElementById('hbBtn');
+const mobNav = document.getElementById('mobNav');
+hbBtn.addEventListener('click', () => {
+  hbBtn.classList.toggle('open');
+  mobNav.classList.toggle('open');
+});
+function closeMob() {
+  hbBtn.classList.remove('open');
+  mobNav.classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (!hbBtn.contains(e.target) && !mobNav.contains(e.target)) closeMob();
+});
+
+const revEls = document.querySelectorAll('.rev');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revEls.forEach(el => obs.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); window.scrollTo({ top: t.offsetTop - 80, behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
